@@ -59,10 +59,11 @@ async def handler(event):
         session.commit()
         session.close()
     else:
-        if event.message.message == 'локация':
-            await client.send_message(sender, strings.location, parse_mode='html')
-        else:
-            await client.send_message(sender, strings.wait, parse_mode='html')
+        await client.send_message(sender, strings.wait, parse_mode='html')
+        # if event.message.message == 'локация':
+        #     await client.send_message(sender, strings.location, parse_mode='html')
+        # else:
+        #     await client.send_message(sender, strings.wait, parse_mode='html')
 
 
 client.run_until_disconnected()
