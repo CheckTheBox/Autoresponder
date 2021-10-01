@@ -41,12 +41,12 @@ client.start()
 # Событие на новое входящее сообщение
 @client.on(events.NewMessage(incoming=True, forwards=None))
 async def handler(event):
-    # print(time.asctime(), '-', event.message)
     session = sqlalchemy.orm.sessionmaker(bind=engine)()
     users = session.query(db.User).all()
     sender = await event.get_input_sender()
+    entity = await client.get_entity(sender.user_id)
+    print(entity)
     if sender.user_id not in [user.user_id for user in users]:
-        entity = await client.get_entity(sender.user_id)
         await event.reply(strings.greeting, parse_mode='html')
         new_user = db.User(
             user_id=entity.id,
@@ -58,11 +58,5 @@ async def handler(event):
         session.add(new_user)
         session.commit()
         session.close()
-    # else:
-        # if event.message.message == 'локация':
-        #     await client.send_message(sender, strings.location, parse_mode='html')
-        # else:
-        #     await client.send_message(sender, strings.wait, parse_mode='html')
-
 
 client.run_until_disconnected()
