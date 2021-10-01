@@ -58,8 +58,7 @@ async def handler(event):
         session.add(new_user)
         session.commit()
         session.close()
-    else:
-        await client.send_message(sender, strings.wait, parse_mode='html')
+    # else:
         # if event.message.message == 'локация':
         #     await client.send_message(sender, strings.location, parse_mode='html')
         # else:
