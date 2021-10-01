@@ -45,7 +45,6 @@ async def handler(event):
     users = session.query(db.User).all()
     sender = await event.get_input_sender()
     entity = await client.get_entity(sender.user_id)
-    print(entity)
     if sender.user_id not in [user.user_id for user in users]:
         await event.reply(strings.greeting, parse_mode='html')
         new_user = db.User(
