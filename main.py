@@ -41,7 +41,7 @@ client.start()
 # Событие на новое входящее сообщение
 @client.on(events.NewMessage(incoming=True, forwards=None))
 async def handler(event):
-    print(time.asctime(), '-', event.message)
+    # print(time.asctime(), '-', event.message)
     session = sqlalchemy.orm.sessionmaker(bind=engine)()
     users = session.query(db.User).all()
     sender = await event.get_input_sender()
@@ -59,9 +59,10 @@ async def handler(event):
         session.commit()
         session.close()
     else:
-        print(event.message.message)
         if event.message.message == 'локация':
             await client.send_message(sender, strings.location, parse_mode='html')
+        else:
+            await client.send_message(sender, strings.wait, parse_mode='html')
 
 
 client.run_until_disconnected()
