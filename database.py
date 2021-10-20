@@ -1,11 +1,6 @@
-import logging
 from sqlalchemy import Column
-from sqlalchemy import Integer, BigInteger, String
+from sqlalchemy import BigInteger, String
 from sqlalchemy.ext.declarative import declarative_base, DeferredReflection
-
-# import utils
-
-log = logging.getLogger(__name__)
 
 # Create a base class to define all the database subclasses
 TableDeclarativeBase = declarative_base()
