@@ -2,6 +2,7 @@ import asyncio
 import configparser
 import logging
 import time
+from pprint import pprint
 
 import sqlalchemy.ext.declarative as sed
 import sqlalchemy
@@ -9,6 +10,8 @@ import sqlalchemy.orm
 from telethon.sync import TelegramClient, events
 
 # Импортируем конфигурационный файл
+from telethon.tl import types
+
 import database as db
 import strings
 
@@ -45,17 +48,18 @@ async def handler(event):
     users = session.query(db.User).all()
     sender = await event.get_input_sender()
     entity = await client.get_entity(sender.user_id)
-    if sender.user_id not in [user.user_id for user in users]:
-        await event.reply(strings.greeting, parse_mode='html')
-        new_user = db.User(
-            user_id=entity.id,
-            first_name=entity.first_name,
-            last_name=entity.last_name,
-            username=entity.username,
-            phone_number=entity.phone
-        )
-        session.add(new_user)
-        session.commit()
-        session.close()
+    if isinstance(event.original_update, types.UpdateShortMessage):
+        if sender.user_id not in [user.user_id for user in users]:
+            await event.reply(strings.greeting, parse_mode='html')
+            new_user = db.User(
+                user_id=entity.id,
+                first_name=entity.first_name,
+                last_name=entity.last_name,
+                username=entity.username,
+                phone_number=entity.phone
+            )
+            session.add(new_user)
+            session.commit()
+            session.close()
 
 client.run_until_disconnected()
